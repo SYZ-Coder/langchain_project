@@ -1,41 +1,41 @@
 一、基础命令
 # 创建前：所有包安装在全局 Python 环境中
 pip list  # 显示所有已安装包
-
 # 创建并激活后：独立的包管理
 langchain_env\Scripts\activate
 pip list  # 只显示虚拟环境中的包
 
+二、安装虚拟环境（作用用于安装包隔离环境，独互不影响，作用范围可以是全局，或者某个项目）
 # 1. 创建虚拟环境
 python -m venv langchain_env（自定义名字）
 
 # 2. 激活虚拟环境
 langchain_env\Scripts\activate
 
-# 激活后提示符会显示环境名称
+# 3.激活后提示符会显示环境名称
 (langchain_env) C:\your_project>
 
-# 检查 Python 路径
+# 4.检查 Python 路径
 where python
 # 应该显示: C:\your_project\langchain_env\Scripts\python.exe
 
-# 检查 pip 位置
+# 5.检查 pip 位置
 pip -V
 # 应该指向虚拟环境中的 pip
 
-# 退出虚拟环境
+# 6.退出虚拟环境
 deactivate
 
 二、LangChain 项目示例
 
-# 1. 创建项目目录
+1. 创建项目目录
 mkdir my_langchain_project
 cd my_langchain_project
 
-# 2. 创建虚拟环境
+2. 创建虚拟环境
 python -m venv langchain_env
 
-# 3. 激活环境
+3. 激活环境
 langchain_env\Scripts\activate
 
 4. 安装 LangChain
@@ -56,15 +56,14 @@ pip install pypdf
 # Chroma向量数据库支持
 pip install chromadb
 
-# 7. 开始开发...
+6. 开始开发...
 python your_script.py
 
-# 8 完成后退出环境
+7. 完成后退出环境
 deactivate
 
 实际参考：
 https://www.yunxin360.com/archives/7293
-
 
 注意：
 # 如果系统有多个 Python 版本，指定版本
