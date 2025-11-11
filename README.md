@@ -1,0 +1,2 @@
+# langchain_project
+langchain官方学习对应的项目案例demo
