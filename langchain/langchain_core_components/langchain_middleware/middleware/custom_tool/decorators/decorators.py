@@ -62,5 +62,5 @@ def personalized_prompt(request: ModelRequest) -> str:
 agent = create_agent(
     model="openai:gpt-4o",
     middleware=[log_before_model, validate_output, retry_model, personalized_prompt],
-    tools=[...],
+    tools=[],
 )
