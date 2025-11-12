@@ -51,20 +51,13 @@ def calculator_tool(expression: str) -> str:
     except Exception as e:
         return f"计算出错: {str(e)}"
 
-# 初始化 DeepSeek 模型实例
-llm = ChatDeepSeek(
-    model="deepseek-chat",  # 使用聊天模型
-    api_key="",  # 替换为你的密钥
-    temperature=0.7
-)
-
 # 3. 创建代理
 agent = create_agent(
     model="deepseek-chat",  # 使用聊天模型
     tools=[weather_tool, calculator_tool],
     middleware=[
         SummarizationMiddleware(
-            model="openai:gpt-4o-mini",
+            model="deepseek-chat",
             max_tokens_before_summary=4000,  # 在 4000 个 token 时触发摘要
             messages_to_keep=20,  # 摘要后保留最近 20 条消息
             summary_prompt="Custom prompt for summarization...",  # 可选

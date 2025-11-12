@@ -7,35 +7,30 @@ from dotenv import load_dotenv
 
 load_dotenv()
 # 限制所有工具调用
-global_limiter = ToolCallLimitMiddleware(thread_limit=20, run_limit=10)
+# global_limiter = ToolCallLimitMiddleware(thread_limit=2, run_limit=2)
 
 # 正确示例：
 @tool("my_tool")
 def my_tool():
     """
-这里添加函数的详细描述
-说明函数的作用、参数和返回值等信息
+你是一个机器小助手
 """
-    print("测试工具")
+    print("测试工具是否限流")
     pass
 
 
 # 限制特定工具
 search_limiter = ToolCallLimitMiddleware(
-    tool_name="my_tool",
+    tool_name="search_tool",
     thread_limit=3,
     run_limit=3,
-)
-llm = ChatDeepSeek(
-    model="deepseek-chat",
-    temperature=0.7
 )
 
 
 agent = create_agent(
-    model=llm,
+    model="deepseek-chat",
     tools=[my_tool],
-    middleware=[global_limiter, search_limiter],
+    middleware=[search_limiter],
 )
 
 if __name__ == "__main__":

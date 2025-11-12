@@ -18,16 +18,10 @@ Please be a helpful assistant.
 # )
 from langchain.chat_models import init_chat_model
 
-model = init_chat_model(
-    "deepseek-chat",
-    temperature=0.5,
-    timeout=10,
-    max_tokens=1000
-)
 
 
 agent = create_agent(
-    model=model,  # 使用聊天模型
+    model="deepseek-chat",  # 使用聊天模型
     system_prompt=LONG_PROMPT,
     middleware=[AnthropicPromptCachingMiddleware(ttl="5m")],
 )

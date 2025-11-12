@@ -60,12 +60,6 @@ class ContactInfo(BaseModel):
     email: str = Field(description="邮箱")
     phone: str = Field(description="电话")
 
-# 初始化 DeepSeek 模型实例
-llm = ChatDeepSeek(
-    model="deepseek-chat",  # 使用聊天模型
-    api_key="",  # 替换为你的密钥
-    temperature=0.7
-)
 
 # 2. 创建代理
 agent = create_agent(
