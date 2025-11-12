@@ -6,3 +6,5 @@ langchain官方学习对应的项目案例以及实战案例
 
 # langchain_fastapi
 API实战案例
+
+持续补充
