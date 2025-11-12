@@ -11,6 +11,10 @@ from typing_extensions import Any
 
 load_dotenv()  # 加载 .env 文件中的环境变量
 
+from langchain.agents.middleware import AgentMiddleware, AgentState
+from langgraph.runtime import Runtime
+from typing import Any
+
 class LoggingMiddleware(AgentMiddleware):
     def before_model(self, state: AgentState, runtime: Runtime) -> dict[str, Any] | None:
         print(f"About to call model with {len(state['messages'])} messages")
@@ -19,7 +23,6 @@ class LoggingMiddleware(AgentMiddleware):
     def after_model(self, state: AgentState, runtime: Runtime) -> dict[str, Any] | None:
         print(f"Model returned: {state['messages'][-1].content}")
         return None
-
 # 1. 定义输出结构
 class ContactInfo(BaseModel):
     """联系人信息"""
@@ -28,25 +31,11 @@ class ContactInfo(BaseModel):
     phone: str = Field(description="电话")
     status: str = Field(description="状态")
 
-# 2. Wrap-style: retry logic
-@wrap_model_call
-def retry_model(
-        request: ModelRequest,
-        handler: Callable[[ModelRequest], ModelResponse],
-) -> ModelResponse:
-    for attempt in range(3):
-        try:
-            return handler(request)
-        except Exception as e:
-            if attempt == 2:
-                raise
-            print(f"Retry {attempt + 1}/3 after error: {e}")
-
 # 3. 创建代理
 agent = create_agent(
     model="deepseek-chat",  # 使用聊天模型
     tools=[],  # 可选工具
-    middleware=[retry_model], #使用自定义中间件
+    middleware=[LoggingMiddleware()], #使用自定义中间件
     response_format=ContactInfo  # 指定输出格式
 )
 

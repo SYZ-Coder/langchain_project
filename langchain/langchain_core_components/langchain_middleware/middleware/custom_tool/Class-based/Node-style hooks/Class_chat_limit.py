@@ -1,23 +1,25 @@
-from typing import Callable
-
-from langchain.agents.middleware import before_model, after_model, wrap_model_call, ModelRequest, ModelResponse, \
-    AgentMiddleware
-from langchain_core.messages import AIMessage
-from langgraph.runtime import Runtime
 from pydantic import BaseModel, Field
 from langchain.agents import create_agent, AgentState
 from dotenv import load_dotenv
-from typing_extensions import Any
 
 load_dotenv()  # 加载 .env 文件中的环境变量
 
-class LoggingMiddleware(AgentMiddleware):
-    def before_model(self, state: AgentState, runtime: Runtime) -> dict[str, Any] | None:
-        print(f"About to call model with {len(state['messages'])} messages")
-        return None
+from langchain.agents.middleware import AgentMiddleware, AgentState
+from langchain.messages import AIMessage
+from langgraph.runtime import Runtime
+from typing import Any
 
-    def after_model(self, state: AgentState, runtime: Runtime) -> dict[str, Any] | None:
-        print(f"Model returned: {state['messages'][-1].content}")
+class MessageLimitMiddleware(AgentMiddleware):
+    def __init__(self, max_messages: int = 50):
+        super().__init__()
+        self.max_messages = max_messages
+
+    def before_model(self, state: AgentState, runtime: Runtime) -> dict[str, Any] | None:
+        if len(state["messages"]) == self.max_messages:
+            return {
+                "messages": [AIMessage("Conversation limit reached.")],
+                "jump_to": "end"
+            }
         return None
 
 # 1. 定义输出结构
@@ -28,25 +30,12 @@ class ContactInfo(BaseModel):
     phone: str = Field(description="电话")
     status: str = Field(description="状态")
 
-# 2. Wrap-style: retry logic
-@wrap_model_call
-def retry_model(
-        request: ModelRequest,
-        handler: Callable[[ModelRequest], ModelResponse],
-) -> ModelResponse:
-    for attempt in range(3):
-        try:
-            return handler(request)
-        except Exception as e:
-            if attempt == 2:
-                raise
-            print(f"Retry {attempt + 1}/3 after error: {e}")
 
 # 3. 创建代理
 agent = create_agent(
     model="deepseek-chat",  # 使用聊天模型
     tools=[],  # 可选工具
-    middleware=[retry_model], #使用自定义中间件
+    middleware=[MessageLimitMiddleware()], #使用自定义中间件
     response_format=ContactInfo  # 指定输出格式
 )
 
