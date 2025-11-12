@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/langchain/langchain.iml" filepath="$PROJECT_DIR$/langchain/langchain.iml" />
       <module fileurl="file://$PROJECT_DIR$/langchain_fastapi/langchain_fastapi.iml" filepath="$PROJECT_DIR$/langchain_fastapi/langchain_fastapi.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/langchain_project.iml" filepath="$PROJECT_DIR$/.idea/langchain_project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/project.iml" filepath="$PROJECT_DIR$/.idea/project.iml" />
     </modules>
   </component>
 </project>
